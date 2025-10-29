@@ -309,3 +309,5 @@ Files prefixed with `demo` can be safely deleted. They are there to provide a st
 
 You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
 # Project-2-Canvas
+we came to the conclusion that the most problematic parts, even for the app, are the page clutter and the settings page.
+On the topic of design, our participants seemed to prefer a larger layout with less individual buttons, rather than a typical list, which seems to align with most mobile UI philosophy.
