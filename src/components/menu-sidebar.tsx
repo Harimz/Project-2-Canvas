@@ -16,6 +16,7 @@ import {
 } from './ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Switch } from './ui/switch'
+import SearchSelect from './search-bar'
 import { useUIStore } from '@/stores/ui-store'
 
 const settingItems = [
@@ -41,6 +42,51 @@ const settingItems = [
   },
 ]
 
+const preferencesItems = [
+	{
+		text: 'Landing Page',
+		action: '',
+	},
+	{
+		text: 'Appearance',
+		action: '',
+	},
+	{
+		text: 'Email Notifications',
+		action: '',
+	},
+	{
+		text: 'Push Notifications',
+		action: '',
+	},
+	{
+		text: 'Subscribe to Calendar Feed',
+		action: '',
+	},
+	{
+		text: 'About',
+		action: '',
+	},
+]
+const inboxItems = [
+	{
+		text: 'Inbox Signature',
+		action: '',
+	},
+]
+const legalItems = [
+	{
+		text: 'Privacy Policy',
+		action: '',
+	},
+	{
+		text: 'Terms of Use',
+		action: '',
+	},
+]
+
+const options = [...preferencesItems, ...inboxItems, ...legalItems]
+
 export const MenuSidebar = () => {
   const showGrades = useUIStore((s) => s.showGrades)
   const setShowGrades = useUIStore((s) => s.setShowGrades)
@@ -50,6 +96,8 @@ export const MenuSidebar = () => {
 
   const [openMenu, setOpenMenu] = useState(false)
   const [openSettings, setOpenSettings] = useState(false)
+	const [search, setSearch] = useState("")
+	const [selected, setSelected] = useState(null)
 
   const handleOpenSettings = () => {
     setOpenMenu(false)
@@ -59,20 +107,59 @@ export const MenuSidebar = () => {
 
   return (
     <>
-      {/** Settings Menu */}
+      { /** Settings Menu */ }
       <Sheet open={openSettings} onOpenChange={setOpenSettings}>
         <SheetContent side="bottom" className="h-[100vh]">
           <SheetHeader>
             <SheetTitle>Settings</SheetTitle>
           </SheetHeader>
 
+					<SearchSelect {...{options, search, setSearch, setSelected}} />
+          <div className="grid flex-1 auto-rows-min gap-4 px-4 text-muted-foreground">
+						<h2 className="text-sm font-semibold leading-snug text-muted-foreground"> 
+						Preferences
+						</h2>
+            {preferencesItems.map((item, index) => (
+              <div
+                className="flex gap-6 items-center"
+                key={index}
+              >
+                <p>{item.text}</p>
+              </div>
+            ))}
+						<hr className="border-t border-muted-foreground my-2" />
+						<h2 className="text-sm font-semibold leading-snug text-muted-foreground"> 
+						Inbox
+						</h2>
+            {inboxItems.map((item, index) => (
+              <div
+                className="flex gap-6 items-center"
+                key={index}
+              >
+                <p>{item.text}</p>
+              </div>
+            ))}
+						<hr className="border-t border-muted-foreground my-2" />
+						<h2 className="text-sm font-semibold leading-snug text-muted-foreground"> 
+						Legal
+						</h2>
+            {legalItems.map((item, index) => (
+              <div
+                className="flex gap-6 items-center"
+                key={index}
+              >
+                <p>{item.text}</p>
+              </div>
+            ))}
+					<hr className="border-t border-muted-foreground my-2" />
+					</div>
           <div className="p-4 space-y-4">
             <p className="text-muted-foreground">Settings content…</p>
           </div>
         </SheetContent>
       </Sheet>
 
-      {/** Settings Menu */}
+      { /** Settings Menu */ } 
       <Sheet open={openMenu} onOpenChange={setOpenMenu}>
         <SheetTrigger asChild>
           <Menu className="size-4" />
