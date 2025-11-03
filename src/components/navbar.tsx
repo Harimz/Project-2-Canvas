@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { List, Filter, RotateCcw } from 'lucide-react'
+import { List, Filter, RotateCcw, Play, Square } from 'lucide-react'
 import { CiGrid41 } from 'react-icons/ci'
 import { useMatchRoute } from '@tanstack/react-router'
 import { MenuSidebar } from './menu-sidebar'
 import { useUIStore } from '@/stores/ui-store'
 import { usePageCounter } from '@/hooks/use-page-counter'
+import { useTimer } from '@/hooks/use-timer'
 
 export const Navbar = () => {
   const view = useUIStore((s) => s.view)
@@ -12,6 +13,7 @@ export const Navbar = () => {
   const matchRoute = useMatchRoute()
   const { reset } = usePageCounter()
   const [showCount, setShowCount] = useState<number | null>(null)
+  const { isRunning, displayTime, start, stop } = useTimer()
 
   let title = 'Dashboard'
   if (matchRoute({ to: '/todo' })) {
@@ -30,28 +32,60 @@ export const Navbar = () => {
 
       <div className="w-full flex items-center justify-between">
         <h1>{title}</h1>
-        <div className="flex items-center gap-3">
-          {showCount !== null && (
-            <span className="text-sm font-semibold animate-in fade-in">
-              {showCount} {showCount === 1 ? 'page' : 'pages'}
+        <div className="flex items-center gap-2">
+          {/* Timer Display */}
+          {displayTime && (
+            <span className="text-xs font-semibold animate-in fade-in">
+              {displayTime}
             </span>
           )}
+          
+          {/* Timer Controls */}
+          {!isRunning ? (
+            <button
+              onClick={start}
+              className="hover:opacity-70 transition-opacity"
+              aria-label="Start timer"
+              title="Start timer"
+            >
+              <Play className="size-4" />
+            </button>
+          ) : (
+            <button
+              onClick={stop}
+              className="hover:opacity-70 transition-opacity"
+              aria-label="Stop timer"
+              title="Stop timer"
+            >
+              <Square className="size-4" />
+            </button>
+          )}
+
+          {/* Page Counter Display */}
+          {showCount !== null && (
+            <span className="text-xs font-semibold animate-in fade-in">
+              {showCount}p
+            </span>
+          )}
+          
+          {/* Page Counter Reset */}
           <button
             onClick={handleReset}
             className="hover:opacity-70 transition-opacity"
             aria-label="Reset page counter"
+            title="Reset page counter"
           >
-            <RotateCcw className="size-5" />
+            <RotateCcw className="size-4" />
           </button>
+          
+          {/* View Toggle */}
           {title === 'Dashboard' ? (
-            // Show List/Grid toggle on Dashboard
             view === 'grid' ? (
               <List className="size-5" onClick={() => setView('list')} />
             ) : (
               <CiGrid41 className="size-5" onClick={() => setView('grid')} />
             )
           ) : title === 'To Do' ? (
-            // Show Filter icon on To Do page
             <Filter className="size-5" />
           ) : null}
         </div>

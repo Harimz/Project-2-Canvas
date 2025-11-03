@@ -1,6 +1,7 @@
 {
-  "short_name": "TanStack App",
-  "name": "Create TanStack App Sample",
+  "short_name": "Canvas",
+  "name": "Canvas Clone",
+  "description": "A Canvas LMS clone built with React and TanStack Router",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +19,11 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "orientation": "any",
+  "scope": "/",
+  "categories": ["education", "productivity"]
 }

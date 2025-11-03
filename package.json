@@ -1,7 +1,9 @@
 {
   "name": "Project-2-Canvas",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "electron.js",
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build",
@@ -9,7 +11,10 @@
     "test": "vitest run",
     "lint": "eslint",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && NODE_ENV=development electron .\"",
+    "electron:build": "npm run build && electron-builder"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -83,6 +88,7 @@
     "prettier": "^3.5.3",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
+    "vite-plugin-pwa": "^1.1.0",
     "vitest": "^3.0.5",
     "web-vitals": "^5.1.0"
   }
