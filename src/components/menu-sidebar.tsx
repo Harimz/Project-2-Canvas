@@ -7,6 +7,8 @@ import {
   User,
 } from 'lucide-react'
 import { useState } from 'react'
+import * as React from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import {
   Sheet,
   SheetContent,
@@ -97,13 +99,27 @@ export const MenuSidebar = () => {
   const [openMenu, setOpenMenu] = useState(false)
   const [openSettings, setOpenSettings] = useState(false)
 	const [search, setSearch] = useState("")
-	const [selected, setSelected] = useState(null)
+	const [selected, setSelected] = useState<{text: string, action: string} | null>(null)
+  const navigate = useNavigate()
 
   const handleOpenSettings = () => {
     setOpenMenu(false)
 
     setOpenSettings(true)
   }
+
+  const handlePushNotifications = () => {
+    setOpenSettings(false)
+    navigate({ to: '/settings/notifications' })
+  }
+
+  // Handle when an item is selected from the search
+  React.useEffect(() => {
+    if (selected?.text === 'Push Notifications') {
+      handlePushNotifications()
+      setSelected(null) // Reset selection
+    }
+  }, [selected])
 
   return (
     <>
@@ -121,8 +137,13 @@ export const MenuSidebar = () => {
 						</h2>
             {preferencesItems.map((item, index) => (
               <div
-                className="flex gap-6 items-center"
+                className="flex gap-6 items-center cursor-pointer hover:text-foreground transition-colors"
                 key={index}
+                onClick={() => {
+                  if (item.text === 'Push Notifications') {
+                    handlePushNotifications()
+                  }
+                }}
               >
                 <p>{item.text}</p>
               </div>
