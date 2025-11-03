@@ -18,43 +18,40 @@ type UIState = {
 	toggleFavorite: (id: number) => void
 }
 
-const safeStorage =
-  typeof window !== 'undefined'
-    ? createJSONStorage(() => localStorage)
-    : undefined
+const storeInitializer = (set: any, get: any) => ({
+  view: 'grid' as ViewMode,
+  showGrades: true,
+  colorOverlay: true,
+  favorites: new Set<number>(),
 
-export const useUIStore = create<UIState>()(
-  persist(
-    (set, get) => ({
-      view: 'grid',
-      showGrades: true,
-      colorOverlay: true,
-			favorites: new Set(),
+  setView: (v: ViewMode) => set({ view: v }),
+  toggleView: () => set({ view: get().view === 'grid' ? 'list' : 'grid' }),
 
-      setView: (v) => set({ view: v }),
-      toggleView: () => set({ view: get().view === 'grid' ? 'list' : 'grid' }),
+  setShowGrades: (v: boolean) => set({ showGrades: v }),
+  toggleShowGrades: () => set({ showGrades: !get().showGrades }),
 
-      setShowGrades: (v) => set({ showGrades: v }),
-      toggleShowGrades: () => set({ showGrades: !get().showGrades }),
+  setColorOverlay: (v: boolean) => set({ colorOverlay: v }),
+  toggleColorOverlay: () => set({ colorOverlay: !get().colorOverlay }),
 
-      setColorOverlay: (v) => set({ colorOverlay: v }),
-      toggleColorOverlay: () => set({ colorOverlay: !get().colorOverlay }),
-
-			toggleFavorite: (id) => 
-			set((state) => {
-				const newFavorites = new Set(state.favorites)
-				state.favorites.has(id) ? newFavorites.delete(id)  : newFavorites.add(id)
-				return { favorites: newFavorites }
-			}),
+  toggleFavorite: (id: number) =>
+    set((state: UIState) => {
+      const newFavorites = new Set(state.favorites)
+      state.favorites.has(id) ? newFavorites.delete(id) : newFavorites.add(id)
+      return { favorites: newFavorites }
     }),
-    {
-      name: 'ui-store',
-      storage: safeStorage,
-      partialize: (s) => ({
-        view: s.view,
-        showGrades: s.showGrades,
-        colorOverlay: s.colorOverlay,
-      }),
-    },
-  ),
-)
+})
+
+export const useUIStore =
+  typeof window !== 'undefined'
+    ? create<UIState>()(
+        persist(storeInitializer, {
+          name: 'ui-store',
+          storage: createJSONStorage(() => localStorage),
+          partialize: (s) => ({
+            view: s.view,
+            showGrades: s.showGrades,
+            colorOverlay: s.colorOverlay,
+          }),
+        }),
+      )
+    : create<UIState>()(storeInitializer)
