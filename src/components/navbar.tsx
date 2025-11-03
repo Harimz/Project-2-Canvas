@@ -5,7 +5,7 @@ import { useMatchRoute, Link } from '@tanstack/react-router'
 import { MenuSidebar } from './menu-sidebar'
 import { useUIStore } from '@/stores/ui-store'
 import { usePageCounter } from '@/hooks/use-page-counter'
-import { useTimer } from '@/hooks/use-timer'
+import { useTimerContext } from '@/contexts/timer-context'
 
 export const Navbar = () => {
   const view = useUIStore((s) => s.view)
@@ -13,7 +13,7 @@ export const Navbar = () => {
   const matchRoute = useMatchRoute()
   const { reset } = usePageCounter()
   const [showCount, setShowCount] = useState<number | null>(null)
-  const { isRunning, displayTime, start, stop } = useTimer()
+  const { isRunning, displayTime, start, stop } = useTimerContext()
 
   let title = 'Dashboard'
   let isClickable = true

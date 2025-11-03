@@ -7,16 +7,25 @@ import { Sidebar } from '@/components/sidebar'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { usePageCounter } from '@/hooks/use-page-counter'
-import { useTimer } from '@/hooks/use-timer'
+import { TimerProvider } from '@/contexts/timer-context'
+import { useTimerContext } from '@/contexts/timer-context'
 
 export const Route = createRootRoute({
   component: RootComponent,
 })
 
 function RootComponent() {
+  return (
+    <TimerProvider>
+      <RootLayout />
+    </TimerProvider>
+  )
+}
+
+function RootLayout() {
   const { reset } = usePageCounter()
   const [showCount, setShowCount] = useState<number | null>(null)
-  const { isRunning, displayTime, start, stop } = useTimer()
+  const { isRunning, displayTime, start, stop } = useTimerContext()
 
   const handleReset = () => {
     const count = reset()

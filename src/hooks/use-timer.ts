@@ -64,25 +64,10 @@ export function useTimer() {
     setDisplayTime(null)
   }, [])
 
-  // Auto-stop timer for CECS 448 specific routes
+  // Auto-stop timer for specific routes
   useEffect(() => {
     const unsubscribe = router.subscribe('onLoad', ({ toLocation }) => {
       const pathname = toLocation.pathname
-      
-      // Check if we're in CECS 448 course (ID 4)
-      const isCECS448 = pathname.includes('/courses/4')
-      
-      if (isCECS448) {
-        // Stop timer for these CECS 448 routes
-        const shouldStop = 
-          pathname.includes('/assignments') ||
-          pathname.includes('/assignment/') ||
-          pathname.includes('/grades')
-        
-        if (shouldStop && isRunning) {
-          stop()
-        }
-      }
       
       // Stop timer for Settings > Push Notifications
       if (pathname.includes('/settings/notifications')) {

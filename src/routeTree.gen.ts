@@ -13,6 +13,7 @@ import { Route as TodoRouteImport } from './routes/todo'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
+import { Route as CoursesCourseIdIndexRouteImport } from './routes/courses.$courseId.index'
 import { Route as CoursesCourseIdGradesRouteImport } from './routes/courses.$courseId.grades'
 import { Route as CoursesCourseIdAssignmentsRouteImport } from './routes/courses.$courseId.assignments'
 import { Route as CoursesCourseIdAssignmentAssignmentIdRouteImport } from './routes/courses.$courseId.assignment.$assignmentId'
@@ -36,6 +37,11 @@ const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
   id: '/courses/$courseId',
   path: '/courses/$courseId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CoursesCourseIdIndexRoute = CoursesCourseIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CoursesCourseIdRoute,
 } as any)
 const CoursesCourseIdGradesRoute = CoursesCourseIdGradesRouteImport.update({
   id: '/grades',
@@ -62,15 +68,16 @@ export interface FileRoutesByFullPath {
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/courses/$courseId/assignments': typeof CoursesCourseIdAssignmentsRoute
   '/courses/$courseId/grades': typeof CoursesCourseIdGradesRoute
+  '/courses/$courseId/': typeof CoursesCourseIdIndexRoute
   '/courses/$courseId/assignment/$assignmentId': typeof CoursesCourseIdAssignmentAssignmentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/todo': typeof TodoRoute
-  '/courses/$courseId': typeof CoursesCourseIdRouteWithChildren
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/courses/$courseId/assignments': typeof CoursesCourseIdAssignmentsRoute
   '/courses/$courseId/grades': typeof CoursesCourseIdGradesRoute
+  '/courses/$courseId': typeof CoursesCourseIdIndexRoute
   '/courses/$courseId/assignment/$assignmentId': typeof CoursesCourseIdAssignmentAssignmentIdRoute
 }
 export interface FileRoutesById {
@@ -81,6 +88,7 @@ export interface FileRoutesById {
   '/settings/notifications': typeof SettingsNotificationsRoute
   '/courses/$courseId/assignments': typeof CoursesCourseIdAssignmentsRoute
   '/courses/$courseId/grades': typeof CoursesCourseIdGradesRoute
+  '/courses/$courseId/': typeof CoursesCourseIdIndexRoute
   '/courses/$courseId/assignment/$assignmentId': typeof CoursesCourseIdAssignmentAssignmentIdRoute
 }
 export interface FileRouteTypes {
@@ -92,15 +100,16 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/courses/$courseId/assignments'
     | '/courses/$courseId/grades'
+    | '/courses/$courseId/'
     | '/courses/$courseId/assignment/$assignmentId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/todo'
-    | '/courses/$courseId'
     | '/settings/notifications'
     | '/courses/$courseId/assignments'
     | '/courses/$courseId/grades'
+    | '/courses/$courseId'
     | '/courses/$courseId/assignment/$assignmentId'
   id:
     | '__root__'
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/courses/$courseId/assignments'
     | '/courses/$courseId/grades'
+    | '/courses/$courseId/'
     | '/courses/$courseId/assignment/$assignmentId'
   fileRoutesById: FileRoutesById
 }
@@ -150,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesCourseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/courses/$courseId/': {
+      id: '/courses/$courseId/'
+      path: '/'
+      fullPath: '/courses/$courseId/'
+      preLoaderRoute: typeof CoursesCourseIdIndexRouteImport
+      parentRoute: typeof CoursesCourseIdRoute
+    }
     '/courses/$courseId/grades': {
       id: '/courses/$courseId/grades'
       path: '/grades'
@@ -177,12 +194,14 @@ declare module '@tanstack/react-router' {
 interface CoursesCourseIdRouteChildren {
   CoursesCourseIdAssignmentsRoute: typeof CoursesCourseIdAssignmentsRoute
   CoursesCourseIdGradesRoute: typeof CoursesCourseIdGradesRoute
+  CoursesCourseIdIndexRoute: typeof CoursesCourseIdIndexRoute
   CoursesCourseIdAssignmentAssignmentIdRoute: typeof CoursesCourseIdAssignmentAssignmentIdRoute
 }
 
 const CoursesCourseIdRouteChildren: CoursesCourseIdRouteChildren = {
   CoursesCourseIdAssignmentsRoute: CoursesCourseIdAssignmentsRoute,
   CoursesCourseIdGradesRoute: CoursesCourseIdGradesRoute,
+  CoursesCourseIdIndexRoute: CoursesCourseIdIndexRoute,
   CoursesCourseIdAssignmentAssignmentIdRoute:
     CoursesCourseIdAssignmentAssignmentIdRoute,
 }
