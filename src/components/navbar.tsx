@@ -1,4 +1,4 @@
-import { List, Filter } from 'lucide-react'
+import { Filter, List } from 'lucide-react'
 import { CiGrid41 } from 'react-icons/ci'
 import { useMatchRoute } from '@tanstack/react-router'
 import { MenuSidebar } from './menu-sidebar'
@@ -10,6 +10,7 @@ export const Navbar = () => {
   const matchRoute = useMatchRoute()
 
   let title = 'Dashboard'
+
   if (matchRoute({ to: '/todo' })) {
     title = 'To Do'
   }
