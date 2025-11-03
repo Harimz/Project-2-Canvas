@@ -6,6 +6,7 @@ import {
   Settings,
   User,
 } from 'lucide-react'
+import { useState } from 'react'
 import {
   Sheet,
   SheetContent,
@@ -47,61 +48,94 @@ export const MenuSidebar = () => {
   const colorOverlay = useUIStore((s) => s.colorOverlay)
   const setColorOverlay = useUIStore((s) => s.setColorOverlay)
 
+  const [openMenu, setOpenMenu] = useState(false)
+  const [openSettings, setOpenSettings] = useState(false)
+
+  const handleOpenSettings = () => {
+    setOpenMenu(false)
+
+    setOpenSettings(true)
+  }
+
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Menu className="size-4" />
-      </SheetTrigger>
-      <SheetContent side="left" className="">
-        <SheetHeader>
-          <SheetTitle>
-            <div className="mt-10">
-              <Avatar className="size-18">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+    <>
+      {/** Settings Menu */}
+      <Sheet open={openSettings} onOpenChange={setOpenSettings}>
+        <SheetContent side="bottom" className="h-[100vh]">
+          <SheetHeader>
+            <SheetTitle>Settings</SheetTitle>
+          </SheetHeader>
 
-              <h1 className="mt-4">Richie Chang</h1>
-              <p className="font-light text-muted-foreground text-sm">
-                Richi.Chang01@student.csulb.edu
-              </p>
-            </div>
-          </SheetTitle>
-        </SheetHeader>
+          <div className="p-4 space-y-4">
+            <p className="text-muted-foreground">Settings content…</p>
+          </div>
+        </SheetContent>
+      </Sheet>
 
-        <div className="grid flex-1 auto-rows-min gap-4 px-4 text-muted-foreground">
-          {settingItems.map((item, index) => (
-            <div className="flex gap-6 items-center" key={index}>
-              {item.icon}
-              <p>{item.text}</p>
-            </div>
-          ))}
-        </div>
+      {/** Settings Menu */}
+      <Sheet open={openMenu} onOpenChange={setOpenMenu}>
+        <SheetTrigger asChild>
+          <Menu className="size-4" />
+        </SheetTrigger>
+        <SheetContent side="left" className="">
+          <SheetHeader>
+            <SheetTitle>
+              <div className="mt-10">
+                <Avatar className="size-18">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
 
-        <div className="p-4 flex flex-col gap-4">
-          <div className="flex items-center justify-between bg-black/5 py-1 px-2 rounded-sm">
-            <p className="text-muted-foreground">Show Grades</p>
-            <Switch
-              id="switch-show-grades"
-              checked={showGrades}
-              onCheckedChange={setShowGrades}
-            />{' '}
+                <h1 className="mt-4">Richie Chang</h1>
+                <p className="font-light text-muted-foreground text-sm">
+                  Richi.Chang01@student.csulb.edu
+                </p>
+              </div>
+            </SheetTitle>
+          </SheetHeader>
+
+          <div className="grid flex-1 auto-rows-min gap-4 px-4 text-muted-foreground">
+            {settingItems.map((item, index) => (
+              <div
+                className="flex gap-6 items-center"
+                key={index}
+                onClick={() => {
+                  if (item.text === 'Settings') {
+                    handleOpenSettings()
+                  }
+                }}
+              >
+                {item.icon}
+                <p>{item.text}</p>
+              </div>
+            ))}
           </div>
 
-          <div className="flex items-center justify-between bg-black/5 py-1 px-2 rounded-sm">
-            <p className="text-muted-foreground">Color Overlay</p>
-            <Switch
-              id="switch-color-overlay"
-              checked={colorOverlay}
-              onCheckedChange={setColorOverlay}
-            />{' '}
-          </div>
+          <div className="p-4 flex flex-col gap-4">
+            <div className="flex items-center justify-between bg-black/5 py-1 px-2 rounded-sm">
+              <p className="text-muted-foreground">Show Grades</p>
+              <Switch
+                id="switch-show-grades"
+                checked={showGrades}
+                onCheckedChange={setShowGrades}
+              />{' '}
+            </div>
 
-          <p className="text-muted-foreground text-sm">
-            Canvas Student V. 7.0.0
-          </p>
-        </div>
-      </SheetContent>
-    </Sheet>
+            <div className="flex items-center justify-between bg-black/5 py-1 px-2 rounded-sm">
+              <p className="text-muted-foreground">Color Overlay</p>
+              <Switch
+                id="switch-color-overlay"
+                checked={colorOverlay}
+                onCheckedChange={setColorOverlay}
+              />{' '}
+            </div>
+
+            <p className="text-muted-foreground text-sm">
+              Canvas Student V. 7.0.0
+            </p>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </>
   )
 }
