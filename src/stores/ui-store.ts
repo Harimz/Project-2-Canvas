@@ -7,6 +7,7 @@ type UIState = {
   view: ViewMode
   showGrades: boolean
   colorOverlay: boolean
+	favorites: Set<number>
 
   setView: (v: ViewMode) => void
   toggleView: () => void
@@ -14,6 +15,7 @@ type UIState = {
   toggleShowGrades: () => void
   setColorOverlay: (v: boolean) => void
   toggleColorOverlay: () => void
+	toggleFavorite: (id: number) => void
 }
 
 const safeStorage =
@@ -27,6 +29,7 @@ export const useUIStore = create<UIState>()(
       view: 'grid',
       showGrades: true,
       colorOverlay: true,
+			favorites: new Set(),
 
       setView: (v) => set({ view: v }),
       toggleView: () => set({ view: get().view === 'grid' ? 'list' : 'grid' }),
@@ -36,6 +39,13 @@ export const useUIStore = create<UIState>()(
 
       setColorOverlay: (v) => set({ colorOverlay: v }),
       toggleColorOverlay: () => set({ colorOverlay: !get().colorOverlay }),
+
+			toggleFavorite: (id) => 
+			set((state) => {
+				const newFavorites = new Set(state.favorites)
+				state.favorites.has(id) ? newFavorites.delete(id)  : newFavorites.add(id)
+				return { favorites: newFavorites }
+			}),
     }),
     {
       name: 'ui-store',

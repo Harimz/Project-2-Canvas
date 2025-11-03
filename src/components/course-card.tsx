@@ -1,4 +1,4 @@
-import { EllipsisVertical } from 'lucide-react'
+import { EllipsisVertical, Star } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
 import { cn } from '@/lib/utils'
 
@@ -17,6 +17,11 @@ interface Props {
 export const CourseCard = ({ course, variant = 'list' }: Props) => {
   const colorOverlay = useUIStore((s) => s.colorOverlay)
   const showGrades = useUIStore((s) => s.showGrades)
+	const favorites = useUIStore((s) => s.favorites)
+	const toggleFavorite = useUIStore((s) => s.toggleFavorite)
+
+	const isFavorite = favorites.has(course.id);
+
 
   const hasImage = !!course.backgroundImage
   const overlay = colorOverlay
@@ -31,6 +36,16 @@ export const CourseCard = ({ course, variant = 'list' }: Props) => {
       }
     : { backgroundColor: course.color }
 
+  const starStyle: React.CSSProperties = isFavorite 
+    ? {
+				color: 'black',
+				fill: 'black'
+      }
+    : {
+				color: 'black',
+				fill: 'transparent'
+      }
+
   return (
     <div
       className={[
@@ -39,7 +54,7 @@ export const CourseCard = ({ course, variant = 'list' }: Props) => {
       ].join(' ')}
     >
       <div
-        className={variant === 'grid' ? 'h-24' : 'h-40'}
+        className={`${variant === 'grid' ? 'h-24' : 'h-40'} flex flex-col`}
         style={backgroundStyle}
       >
         <div className="flex justify-between items-center px-1 py-2">
@@ -56,6 +71,10 @@ export const CourseCard = ({ course, variant = 'list' }: Props) => {
             <EllipsisVertical className="size-4" />
           </div>
         </div>
+
+      	<div className="flex mt-auto justify-end items-center px-1 py-2 ">
+					<Star onClick={() => {toggleFavorite(course.id)}} style={starStyle} className="size-4" />
+				</div>
       </div>
 
       <div className={['px-4', variant === 'list' ? 'py-4' : 'py-2'].join(' ')}>
