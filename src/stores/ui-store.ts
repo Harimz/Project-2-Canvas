@@ -5,8 +5,15 @@ export type ViewMode = 'grid' | 'list'
 
 type UIState = {
   view: ViewMode
+  showGrades: boolean
+  colorOverlay: boolean
+
   setView: (v: ViewMode) => void
   toggleView: () => void
+  setShowGrades: (v: boolean) => void
+  toggleShowGrades: () => void
+  setColorOverlay: (v: boolean) => void
+  toggleColorOverlay: () => void
 }
 
 const safeStorage =
@@ -18,13 +25,26 @@ export const useUIStore = create<UIState>()(
   persist(
     (set, get) => ({
       view: 'grid',
+      showGrades: true,
+      colorOverlay: true,
+
       setView: (v) => set({ view: v }),
       toggleView: () => set({ view: get().view === 'grid' ? 'list' : 'grid' }),
+
+      setShowGrades: (v) => set({ showGrades: v }),
+      toggleShowGrades: () => set({ showGrades: !get().showGrades }),
+
+      setColorOverlay: (v) => set({ colorOverlay: v }),
+      toggleColorOverlay: () => set({ colorOverlay: !get().colorOverlay }),
     }),
     {
       name: 'ui-store',
       storage: safeStorage,
-      partialize: (state) => ({ view: state.view }),
+      partialize: (s) => ({
+        view: s.view,
+        showGrades: s.showGrades,
+        colorOverlay: s.colorOverlay,
+      }),
     },
   ),
 )

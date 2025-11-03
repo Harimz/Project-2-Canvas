@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from './ui/sheet'
 
+import { MenuSidebar } from './menu-sidebar'
 import { useUIStore } from '@/stores/ui-store'
 
 export const Navbar = () => {
@@ -16,19 +17,7 @@ export const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 flex md:hidden bg-black p-4 gap-2 text-white items-center">
-      <Sheet>
-        <SheetTrigger asChild>
-          <Menu className="size-4" />
-        </SheetTrigger>
-        <SheetContent side="left" className="w-full">
-          <SheetHeader>
-            <SheetTitle>
-              <img src="/canvas-logo.png" className="w-[10rem]" />
-            </SheetTitle>
-          </SheetHeader>
-          <div className="grid flex-1 auto-rows-min gap-6 px-4"></div>
-        </SheetContent>
-      </Sheet>
+      <MenuSidebar />
 
       <div className="w-full flex items-center justify-between">
         <h1>Dashboard</h1>

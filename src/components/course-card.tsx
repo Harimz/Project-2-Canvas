@@ -1,4 +1,6 @@
-import { EllipsisVertical, Star } from 'lucide-react'
+import { EllipsisVertical } from 'lucide-react'
+import { useUIStore } from '@/stores/ui-store'
+import { cn } from '@/lib/utils'
 
 interface Props {
   course: {
@@ -13,17 +15,21 @@ interface Props {
 }
 
 export const CourseCard = ({ course, variant = 'list' }: Props) => {
+  const colorOverlay = useUIStore((s) => s.colorOverlay)
+  const showGrades = useUIStore((s) => s.showGrades)
+
   const hasImage = !!course.backgroundImage
+  const overlay = colorOverlay
+    ? `${course.color}cc, ${course.color}cc`
+    : `transparent, transparent`
 
   const backgroundStyle: React.CSSProperties = hasImage
     ? {
-        backgroundImage: `linear-gradient(to bottom, ${course.color}cc, ${course.color}cc), url(${course.backgroundImage})`,
+        backgroundImage: `linear-gradient(to bottom, ${overlay}), url(${course.backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }
-    : {
-        backgroundColor: course.color,
-      }
+    : { backgroundColor: course.color }
 
   return (
     <div
@@ -33,11 +39,16 @@ export const CourseCard = ({ course, variant = 'list' }: Props) => {
       ].join(' ')}
     >
       <div
-        className={variant === 'grid' ? 'h-[6rem]' : 'h-[10rem]'}
+        className={variant === 'grid' ? 'h-24' : 'h-40'}
         style={backgroundStyle}
       >
         <div className="flex justify-between items-center px-1 py-2">
-          <div className="bg-white rounded-full text-xs text-muted-foreground px-2 font-semibold">
+          <div
+            className={cn(
+              'bg-white rounded-full text-xs text-muted-foreground px-2 font-semibold',
+              !showGrades && 'invisible',
+            )}
+          >
             N/A
           </div>
 

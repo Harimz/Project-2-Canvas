@@ -1,6 +1,3 @@
-import React from 'react'
-import { TfiDashboard } from 'react-icons/tfi'
-import { RxCalendar } from 'react-icons/rx'
 import { Bell, CalendarDays, ClipboardList, Gauge, Mail } from 'lucide-react'
 
 export const Footer = () => {
@@ -18,9 +15,13 @@ export const Footer = () => {
         <ClipboardList className="size-5" />
         <p className="text-xs">To Do</p>
       </div>
-      <div className="items-center flex flex-col">
+      <div className="relative items-center flex flex-col">
         <Bell className="size-5" />
         <p className="text-xs">Notifications</p>
+
+        <div className="absolute -top-3 right-4 bg-red-500 h-5 w-5 flex items-center justify-center rounded-full">
+          <p className="text-xs text-white">21</p>
+        </div>
       </div>
       <div className="items-center flex flex-col">
         <Mail className="size-5" />
