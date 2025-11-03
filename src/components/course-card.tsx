@@ -1,5 +1,4 @@
-import { Megaphone, MessagesSquare, NotebookPen } from 'lucide-react'
-import { Card } from './ui/card'
+import { EllipsisVertical, Star } from 'lucide-react'
 
 interface Props {
   course: {
@@ -10,9 +9,10 @@ interface Props {
     backgroundImage: string
     color: string
   }
+  variant?: 'list' | 'grid'
 }
 
-export const CourseCard = ({ course }: Props) => {
+export const CourseCard = ({ course, variant = 'list' }: Props) => {
   const hasImage = !!course.backgroundImage
 
   const backgroundStyle: React.CSSProperties = hasImage
@@ -26,28 +26,46 @@ export const CourseCard = ({ course }: Props) => {
       }
 
   return (
-    <div className="w-full md:basis-[18rem] md:max-w-[18rem] rounded-sm p-0 cursor-pointer hover:shadow-xl">
-      <div className="h-[10rem] w-full" style={backgroundStyle}></div>
+    <div
+      className={[
+        'rounded-sm p-0 cursor-pointer shadow-md hover:shadow-xl transition-shadow',
+        variant === 'list' ? 'w-full' : 'w-full',
+      ].join(' ')}
+    >
+      <div
+        className={variant === 'grid' ? 'h-[6rem]' : 'h-[10rem]'}
+        style={backgroundStyle}
+      >
+        <div className="flex justify-between items-center px-1 py-2">
+          <div className="bg-white rounded-full text-xs text-muted-foreground px-2 font-semibold">
+            N/A
+          </div>
 
-      <div className="px-4 py-4 shadow-md">
+          <div className="bg-white rounded-full text-xs text-muted-foreground p-1 font-semibold">
+            <EllipsisVertical className="size-4" />
+          </div>
+        </div>
+      </div>
+
+      <div className={['px-4', variant === 'list' ? 'py-4' : 'py-2'].join(' ')}>
         <h1
           style={{ color: course.color }}
-          className="font-semibold underline truncate"
+          className={[
+            'font-semibold underline truncate',
+            variant === 'grid' && 'text-sm',
+          ].join(' ')}
         >
           {course.title}
         </h1>
 
-        <p className="underline text-[#09508C]">{course.desc}</p>
-
-        <p className="text-xs text-[#09508C]">{course.semester}</p>
-
-        <div className="flex gap-8 mt-4">
-          <Megaphone className="size-4" />
-
-          <MessagesSquare className="size-4" />
-
-          <NotebookPen className="size-4" />
-        </div>
+        <p
+          className={[
+            'underline text-[#09508C]',
+            variant === 'grid' && 'text-xs',
+          ].join(' ')}
+        >
+          {course.desc}
+        </p>
       </div>
     </div>
   )
