@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { List, Filter, RotateCcw, Play, Square } from 'lucide-react'
 import { CiGrid41 } from 'react-icons/ci'
-import { useMatchRoute } from '@tanstack/react-router'
+import { useMatchRoute, Link } from '@tanstack/react-router'
 import { MenuSidebar } from './menu-sidebar'
 import { useUIStore } from '@/stores/ui-store'
 import { usePageCounter } from '@/hooks/use-page-counter'
@@ -16,8 +16,10 @@ export const Navbar = () => {
   const { isRunning, displayTime, start, stop } = useTimer()
 
   let title = 'Dashboard'
+  let isClickable = true
   if (matchRoute({ to: '/todo' })) {
     title = 'To Do'
+    isClickable = false
   }
 
   const handleReset = () => {
@@ -31,7 +33,13 @@ export const Navbar = () => {
       <MenuSidebar />
 
       <div className="w-full flex items-center justify-between">
-        <h1>{title}</h1>
+        {isClickable ? (
+          <Link to="/" className="hover:opacity-80 transition-opacity">
+            <h1>{title}</h1>
+          </Link>
+        ) : (
+          <h1>{title}</h1>
+        )}
         <div className="flex items-center gap-2">
           {/* Timer Display */}
           {displayTime && (

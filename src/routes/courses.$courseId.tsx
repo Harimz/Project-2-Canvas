@@ -1,5 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { courses } from '@/data/courses'
+import { useTimer } from '@/hooks/use-timer'
 
 export const Route = createFileRoute('/courses/$courseId')({
   component: CoursePage,
@@ -7,6 +8,8 @@ export const Route = createFileRoute('/courses/$courseId')({
 
 function CoursePage() {
   const { courseId } = Route.useParams()
+  const navigate = useNavigate()
+  const { stop: stopTimer } = useTimer()
   const course = courses.find((c) => c.id === Number(courseId))
 
   if (!course) {
@@ -16,6 +19,19 @@ function CoursePage() {
         <p className="mt-4">The course you're looking for doesn't exist.</p>
       </div>
     )
+  }
+
+  const isCECS448 = courseId === '4'
+
+  const handleQuickLinkClick = (link: string) => {
+    // Stop timer for CECS 448 specific links
+    if (isCECS448 && (link === 'Assignments' || link === 'Grades')) {
+      stopTimer()
+    }
+    
+    // Navigate to the appropriate page
+    const linkPath = link.toLowerCase()
+    navigate({ to: `/courses/${courseId}/${linkPath}` })
   }
 
   const hasImage = !!course.backgroundImage
@@ -71,22 +87,42 @@ function CoursePage() {
             <div className="border rounded-lg p-4 bg-white shadow-sm">
               <h3 className="font-semibold mb-3">Quick Links</h3>
               <ul className="space-y-2">
-                <li className="text-blue-600 hover:underline cursor-pointer">
+                <li 
+                  onClick={() => handleQuickLinkClick('Announcements')}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
                   Announcements
                 </li>
-                <li className="text-blue-600 hover:underline cursor-pointer">
+                <li 
+                  onClick={() => handleQuickLinkClick('Assignments')}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
                   Assignments
+                  {isCECS448 && <span className="text-xs ml-2 text-gray-500">(⏱️ stops timer)</span>}
                 </li>
-                <li className="text-blue-600 hover:underline cursor-pointer">
+                <li 
+                  onClick={() => handleQuickLinkClick('Discussions')}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
                   Discussions
                 </li>
-                <li className="text-blue-600 hover:underline cursor-pointer">
+                <li 
+                  onClick={() => handleQuickLinkClick('Grades')}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
                   Grades
+                  {isCECS448 && <span className="text-xs ml-2 text-gray-500">(⏱️ stops timer)</span>}
                 </li>
-                <li className="text-blue-600 hover:underline cursor-pointer">
+                <li 
+                  onClick={() => handleQuickLinkClick('Modules')}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
                   Modules
                 </li>
-                <li className="text-blue-600 hover:underline cursor-pointer">
+                <li 
+                  onClick={() => handleQuickLinkClick('Syllabus')}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
                   Syllabus
                 </li>
               </ul>
