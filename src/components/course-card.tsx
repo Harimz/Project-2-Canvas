@@ -1,5 +1,6 @@
 import { Megaphone, MessagesSquare, NotebookPen } from 'lucide-react'
 import { Card } from './ui/card'
+import { Link } from '@tanstack/react-router'
 
 interface Props {
   course: {
@@ -26,7 +27,11 @@ export const CourseCard = ({ course }: Props) => {
       }
 
   return (
-    <div className="w-full md:basis-[18rem] md:max-w-[18rem] rounded-sm p-0 cursor-pointer hover:shadow-xl">
+    <Link
+      to="/courses/$courseId"
+      params={{ courseId: course.id.toString() }}
+      className="w-full md:basis-[18rem] md:max-w-[18rem] rounded-sm p-0 cursor-pointer hover:shadow-xl block"
+    >
       <div className="h-[10rem] w-full" style={backgroundStyle}></div>
 
       <div className="px-4 py-4 shadow-md">
@@ -49,6 +54,6 @@ export const CourseCard = ({ course }: Props) => {
           <NotebookPen className="size-4" />
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
