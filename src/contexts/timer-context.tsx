@@ -9,7 +9,7 @@ interface TimerContextType {
   reset: () => void
 }
 
-const TimerContext = createContext<TimerContextType | null>(null)
+export const TimerContext = createContext<TimerContextType | null>(null)
 
 export function TimerProvider({ children }: { children: ReactNode }) {
   const timer = useTimer()

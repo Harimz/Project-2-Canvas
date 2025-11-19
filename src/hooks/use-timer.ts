@@ -32,8 +32,7 @@ export function useTimer() {
       
       setDisplayTime(timeStr)
       
-      // Auto-hide after 5 seconds
-      setTimeout(() => setDisplayTime(null), 5000)
+      // Time will persist until timer is started again
     }
   }, [isRunning])
 
@@ -43,7 +42,7 @@ export function useTimer() {
       elapsedRef.current = 0
       startTimeRef.current = Date.now()
       setIsRunning(true)
-      setDisplayTime(null) // Hide time when starting
+      setDisplayTime(null) // Clear displayed time when starting new timer
 
       intervalRef.current = setInterval(() => {
         if (startTimeRef.current) {
@@ -71,6 +70,13 @@ export function useTimer() {
       
       // Stop timer for Settings > Push Notifications
       if (pathname.includes('/settings/notifications')) {
+        if (isRunning) {
+          stop()
+        }
+      }
+      
+      // Stop timer for CECS 448 Mobile App Wireframe Design assignment
+      if (pathname === '/courses/4/assignment/1') {
         if (isRunning) {
           stop()
         }

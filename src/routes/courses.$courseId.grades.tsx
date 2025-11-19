@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { courses } from '@/data/courses'
 import { useState } from 'react'
 import { useTimerContext } from '@/contexts/timer-context'
+import { usePageCounterContext } from '@/contexts/page-counter-context'
 
 export const Route = createFileRoute('/courses/$courseId/grades')({
   component: GradesPage,
@@ -13,6 +14,7 @@ function GradesPage() {
   const isCECS448 = courseId === '4'
   const [revealedGrades, setRevealedGrades] = useState<Set<number>>(new Set())
   const { stop: stopTimer, isRunning } = useTimerContext()
+  const { reset: resetPageCounter, displayCount } = usePageCounterContext()
 
   if (!course) {
     return <div>Course not found</div>
@@ -42,9 +44,15 @@ function GradesPage() {
     : 0
 
   const toggleGrade = (id: number, gradeName: string) => {
-    // Stop timer for CECS 448 Midterm Exam when revealing grade
-    if (isCECS448 && gradeName === 'Midterm Exam' && !revealedGrades.has(id) && isRunning) {
-      stopTimer()
+    const isRevealing = !revealedGrades.has(id)
+    
+    // Stop timer and reset page counter for CECS 448 Midterm Exam when revealing grade
+    if (isCECS448 && gradeName === 'Midterm Exam' && isRevealing) {
+      if (isRunning) {
+        stopTimer()
+      }
+      const count = resetPageCounter()
+      displayCount(count) // Display the count before resetting
     }
     
     setRevealedGrades(prev => {
